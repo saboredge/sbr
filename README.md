@@ -16,12 +16,16 @@ Library of usefule functions for analyzing public datasets with machine learning
 ## Repo Structure
 
 This repository is structured as follows:
- - `sbr_env.yml`: a tested conda environment
- - `datasets`: functions for creating tfds-type datasets; analogous to tf.data.Datasets
- - `data`: functions under `datasets` may write supplementa, useful metadata here
  - `docs`:  sphinx documentation for this library, hosted on readthedocs.io
- - `preprocessing`: functions to help with preprocessing; analogous to tf.keras.preprocessing
- - `test`: regression unit tests
+ - `.readthedocs.yaml`: configuration for deploying sbr.readthedocs.io
+ - `src/sbr`: all the code for the sbr pypi package
+ - `src/sbr/preprocessing`: functions to help with preprocessing; analogous to `tf.keras.preprocessing`
+ - `src/sbr/datasets`: functions for creating tfds-type datasets; analogous to `tf.data.Datasets`
+ - `sbr_env.yml`: a tested conda environment
+ - `data`: functions under `src/sbr/datasets/structured` may write supplemental, useful metadata here
+ - `tests`: regression unit tests
+ - `LICENSE`: terms of use and licensing of all the code in this repository
+ - `pyproject.toml`: for pypi deployment
 
 ## Getting started
 

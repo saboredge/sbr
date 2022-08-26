@@ -15,7 +15,6 @@ data/
 src/data/
 src/sbr/data/
 src/dist/
-src/sbr/docs/source/
 
 # runtime files
 src/sbr/datasets/structured/checksums.tsv
@@ -91,7 +90,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-src/sbr/docs/_build/
+docs/_build/
+docs/source/
 
 # PyBuilder
 target/
