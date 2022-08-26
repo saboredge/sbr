@@ -47,7 +47,7 @@ Make the GTEx dataset:
 
 ```
 mamba install -c conda-forge tensorflow-datasets
-tfds build --register_checksums  --overwrite datasets/structured/gtex
+tfds build --register_checksums  --overwrite src/sbr/datasets/structured/gtex
 ```
 
 ## Make docs:
@@ -58,8 +58,10 @@ For more help, see this article: https://saboredge.com/Generating-documentation-
 mamba install python3-sphinx 
 mamba install myst-parser 
 mamba install sphinx_rtd_theme
+cd src/sbr
+mkdir -p docs/source
 sphinx-apidoc -f -o docs/source ../sbr
-(mkdir -p docs/source; cp docs/index.rst docs/conf.py docs/source)
+cp docs/index.rst docs/conf.py docs/source
 ```
 
 ## Future

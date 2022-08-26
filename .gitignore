@@ -11,6 +11,7 @@ Untitled*.ipynb
 *#
 
 # runtime directories
+data/
 src/data/
 src/sbr/data/
 src/dist/
