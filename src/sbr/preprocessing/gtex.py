@@ -6,12 +6,14 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
 def dataset_setup(sample_count_threshold=500, test_fraction = 0.1, validation_fraction = 0.1, verbose = True, batch_size = 32, seed = None):
-    ###
-    # Retrieve and prep the data
-    ###
+    '''
+     Retrieve and prep the data
+    xxx - this is not always the same = y[0] changes! seed isn't working right.
+    '''
 
     # load X, y, class_names
     ds, info = tfds.load("gtex", split="train", with_info = True, as_supervised=True)
+
     l=list(iter(ds.take(info.splits['train'].num_examples)))
     X, y = map(np.array, zip(*l))
     class_names=np.array(info.features['target'].names)
