@@ -64,6 +64,9 @@ sphinx-apidoc -f -o docs/source ../sbr
 
 ## Future
 
+* doc badge
+* pypi package
+* git attr
 * unit tests
 * Generative model functions
 * Graph model functions
