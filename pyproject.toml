@@ -2,7 +2,7 @@
 name = "sbr"
 version = "$Id$"
 authors = [
-  { name="K R", email="kimberly.robasky@gmail.com" },
+  { name="Kimberly Robasky", email="kimberly.robasky@gmail.com" },
 ]
 description = "Tools to support machine learning on public biomolecular datasets"
 readme = "README.md"
