@@ -62,10 +62,10 @@ For more help, see this article: https://saboredge.com/Generating-documentation-
 mamba install python3-sphinx 
 mamba install myst-parser 
 mamba install sphinx_rtd_theme
-cd src/sbr
 mkdir -p docs/source
-sphinx-apidoc -f -o docs/source ../sbr
+sphinx-apidoc -f -o docs/source src/sbr
 cp docs/index.rst docs/conf.py docs/source
+cd docs; make html; cd .. # makes local copy of documentation, or see https://sbr.readthedocs.io
 ```
 
 ## Future
