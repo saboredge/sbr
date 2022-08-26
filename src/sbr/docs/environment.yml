@@ -1,0 +1,14 @@
+name: docs 
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sphinx_apidoc==5.1.1
+  - sphinx_rtd_theme==0.4.3
+  - myst-parser==0.18.0
+  - numpy==1.19.5
+  - pandas==1.4.3
+  - tensorflow==2.6.2
+  - sklearn==1.1.2
+  - pip>=22.2.2
+  - pip:
