@@ -52,10 +52,12 @@ tfds build --register_checksums  --overwrite datasets/structured/gtex
 
 ## Make docs:
 
+For more help, see this article: https://saboredge.com/Generating-documentation-from-python
+
 ```
-sudo apt-get install python3-sphinx
-# probably don't need this:
-# mamba install -c conda-forge sphinxcontrib-apidoc
+mamba install python3-sphinx 
+mamba install myst-parser 
+mamba install sphinx_rtd_theme
 sphinx-apidoc -f -o docs/source ../sbr
 (mkdir -p docs/source; cp docs/index.rst docs/conf.py docs/source)
 ```

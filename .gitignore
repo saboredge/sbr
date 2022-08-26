@@ -12,6 +12,8 @@ Untitled*.ipynb
 # runtime directories
 src/data/
 src/dist/
+dist/
+src/sbr/data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

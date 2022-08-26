@@ -1,0 +1,19 @@
+[project]
+name = "sbr"
+version = "$Id$"
+authors = [
+  { name="K R", email="kimberly.robasky@gmail.com" },
+]
+description = "Tools to support machine learning on public biomolecular datasets"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.9.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/saboredge/sbr"
+"Bug Tracker" = "https://github.com/saboredge/sbr/issues"
