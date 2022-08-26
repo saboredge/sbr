@@ -23,7 +23,7 @@ This repository is structured as follows:
  - `src/sbr/datasets`: functions for creating tfds-type datasets; analogous to `tf.data.Datasets`
  - `sbr_env.yml`: a tested conda environment
  - `data`: functions under `src/sbr/datasets/structured` may write supplemental, useful metadata here
- - `tests`: regression unit tests
+ - `src/tests`: regression unit tests; run with `cd src; nosetests`
  - `LICENSE`: terms of use and licensing of all the code in this repository
  - `pyproject.toml`: for pypi deployment
 
@@ -70,10 +70,8 @@ cd docs; make html; cd .. # makes local copy of documentation, or see https://sb
 
 ## Future
 
-* doc badge
 * pypi package
 * git attr
-* unit tests
 * Generative model functions
 * Graph model functions
 * Gene expression visualization functions (heatmap, volcano, t-SNE, M-A, etc.)
