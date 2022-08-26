@@ -1,3 +1,4 @@
+
 # trash files
 trash/
 sav/
@@ -11,9 +12,12 @@ Untitled*.ipynb
 
 # runtime directories
 src/data/
-src/dist/
-dist/
 src/sbr/data/
+src/dist/
+src/sbr/docs/source/
+
+# runtime files
+src/sbr/datasets/structured/checksums.tsv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
