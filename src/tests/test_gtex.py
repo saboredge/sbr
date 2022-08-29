@@ -1,12 +1,22 @@
 #!/usr/bin/env python
+import shutil
+import os
+shutil.rmtree('tests/out', ignore_errors=True, onerror=None)
+os.makedirs('tests/out')
 import sys
 sys.path.insert(0, f'.')
-
-import numpy as np
-
 from unittest import TestCase
 
+import numpy as np
+import difflib
+import asyncio
+
 class TestSBR(TestCase):
+    def fcmp(self, test_file_name):
+        import filecmp
+        self.assertTrue(filecmp.cmp(f'tests/out/{test_file_name}',
+                                    f'tests/expected/{test_file_name}'))
+
     load_done = False
     setup_done = False
 
@@ -66,14 +76,27 @@ class TestSBR(TestCase):
         print(f"y_train[0] = {self.y_train[0]}")
         self.assertTrue((self.y_train[0] == y_train_0_expected).all())
 
+
         
+    def test_compile(self):
+        self.cache_setup()
 
-def main():
-    t = TestSBR()
-    t.test_load()
-    t.test_setup_classnames()
-    t.test_setup_first_label()
+        from sbr import compile
+        specificityAtSensitivityThreshold=0.50
+        sensitivityAtSpecificityThreshold=0.50
+        model = compile.one_layer_multicategorical(input_size=self.x_train.shape[1],
+                                                   output_size=self.y_train.shape[1],
+                                                   dim=1000,
+                                                   output_activation='softmax',
+                                                   learning_rate=0.0001,
+                                                   isMultilabel=True,
+                                                   specificityAtSensitivityThreshold=specificityAtSensitivityThreshold,
+                                                   sensitivityAtSpecificityThreshold=sensitivityAtSpecificityThreshold,
+                                                   verbose=True)
 
-if __name__ == "__main__":
-    main()
+        with open('tests/out/compile.txt','w') as fh:
+            # Pass the file handle in as a lambda function to make it callable
+            model.summary(print_fn=lambda x: fh.write(x + '\n'))
+
+        self.fcmp('compile.txt')
 

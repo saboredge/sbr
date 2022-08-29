@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "017dec59e6c83a935cecd7caf08034245700f7290741a97b3cab7259b3f79b36"
+            "sha256": "5c8fd66519be502afac4f8cad92a82ad3b0c65b00b7d4408680b2240d0e01531"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -543,6 +543,14 @@
             "index": "pypi",
             "version": "==7.1.2"
         },
+        "pytest-tap": {
+            "hashes": [
+                "sha256:4fbbc0e090c2e94f6199bee4e4f68ab3c5e176b37a72a589ad84e0f72a2fce55",
+                "sha256:5f0919a147cf0396b2f10d64d365a0bf8062e06543e93c675c9d37f5605e983c"
+            ],
+            "index": "pypi",
+            "version": "==3.3"
+        },
         "python-dateutil": {
             "hashes": [
                 "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86",
@@ -657,6 +665,13 @@
             ],
             "index": "pypi",
             "version": "==0.0"
+        },
+        "tap.py": {
+            "hashes": [
+                "sha256:3c0cd45212ad5a25b35445964e2517efa000a118a1bfc3437dae828892eaf1e1",
+                "sha256:928c852f3361707b796c93730cc5402c6378660b161114461066acf53d65bf5d"
+            ],
+            "version": "==3.1"
         },
         "tensorboard": {
             "hashes": [
