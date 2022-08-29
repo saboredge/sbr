@@ -1,3 +1,5 @@
+[![PyTest](https://github.com/saboredge/sbr/actions/workflows/pytest.yaml/badge.svg)](https://github.com/saboredge/sbr/actions/workflows/pytest.yaml)
+
 [![Documentation Status](https://readthedocs.org/projects/sbr/badge/?version=latest)](https://sbr.readthedocs.io/en/latest/?badge=latest)
 # sbr: 
 
