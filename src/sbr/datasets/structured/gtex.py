@@ -255,7 +255,7 @@ class Gtex(tfds.core.GeneratorBasedBuilder):
     print("++ Change attr tissue type names to something directory-friendly")
     attr_df["SMTS"] = attr_df["SMTS"].str.strip()
     attr_df["SMTS"] = attr_df["SMTS"].str.replace(' - ','-')
-    attr_df["SMTS"] = attr_df["SMTS"].str.replace(' \(','__').replace('\)','__')
+    attr_df["SMTS"] = attr_df["SMTS"].str.replace(r' (','__').replace(r')','__')
     attr_df["SMTS"] = attr_df["SMTS"].str.replace(' ','_')
 
     TISSUE_LIST=set(attr_df["SMTS"])
