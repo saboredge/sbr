@@ -14,6 +14,7 @@ def one_layer_multicategorical(input_size = None,
                                bias_initializer = tf.zeros_initializer(),
                                output_activation: str ='softmax',
                                isMultilabel: bool = True,
+                               seed = None,
                                verbose: bool = True):
     """Compile a single layer multicategorical model. 
 
@@ -39,6 +40,8 @@ def one_layer_multicategorical(input_size = None,
       output_activation: Use `softmax` for multicategorical, one-hot encoded
 
       isMultilabel: Should alwasy be True for multicategorical models
+    
+      seed: used with tensorflow, numpy, python to make random number generator create reproducible results. Also use 'seed' in initializer,
 
       verbose: If True, print model summary. Set to False if input_size = None to avoid error
 
@@ -60,6 +63,7 @@ def one_layer_multicategorical(input_size = None,
                                            dim=1000,
                                            specificityAtSensitivityThreshold=0.50,
                                            sensitivityAtSpecificityThreshold=0.50,
+                                           seed = 42,
                                            verbose=True)
         Model: "sequential"
         _________________________________________________________________
@@ -76,10 +80,22 @@ def one_layer_multicategorical(input_size = None,
 
     """
     import tensorflow as tf
+    import  numpy as np
     
     if input_size == None and verbose:
         print("! Turning off verbose: model.summary() will cause an error if model is compiled with unknown input size.")
         verbose = False
+    # python random seed not used
+    # import random
+    # random.seed(seed)
+    # tensorflow seed must be set
+    tf.random.set_seed(seed)
+    # xxx see if this is required?: - doesn't seem like graph needs to be reset either
+    # from tensorflow.python.framework import ops
+    # ops.reset_default_graph()
+
+    # numpy random seed not used
+    # np.random.seed(seed)
 
     model = Sequential()
     model.add(BADBlock(dim, input_dim=input_size, name="Input_BAD",
