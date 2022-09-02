@@ -85,17 +85,8 @@ def one_layer_multicategorical(input_size = None,
     if input_size == None and verbose:
         print("! Turning off verbose: model.summary() will cause an error if model is compiled with unknown input size.")
         verbose = False
-    # python random seed not used
-    # import random
-    # random.seed(seed)
-    # tensorflow seed must be set
-    tf.random.set_seed(seed)
-    # xxx see if this is required?: - doesn't seem like graph needs to be reset either
-    # from tensorflow.python.framework import ops
-    # ops.reset_default_graph()
 
-    # numpy random seed not used
-    # np.random.seed(seed)
+    tf.random.set_seed(seed)
 
     model = Sequential()
     model.add(BADBlock(dim, input_dim=input_size, name="Input_BAD",
