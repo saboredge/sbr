@@ -21,7 +21,7 @@ def compare_predictions(model, x_test, y_test, class_names=None, verbose = True)
 
     Exampe usage:
       >>> y_pred, pairs = compare_predictions(model=model, 
-                                              x_test=x_test, y_test=ytest, 
+                                              x_test=x_test, y_test=y_test, 
                                               class_names=class_names, 
                                               verbose = True)
 
