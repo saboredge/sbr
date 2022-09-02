@@ -9,6 +9,7 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
                            lr_factor=0.1,
                            batch_size=32,
                            shuffle_value=100,
+                           seed=None,
                            initial_epoch=0,
                            train_verbose=1,
                            checkpoint_verbose=1):
@@ -46,6 +47,8 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
       batch_size [32]: probably don't change this
 
       shuffle_value [100]:
+   
+      seed [None]: seed the random number generator for reproducibility
 
       initial_epoch [0]: use this if you want to resume training at a particular epoch
 
@@ -97,6 +100,11 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
 
 
     """
+    if seed != None:
+        tf.random.set_seed(seed) # set tensorflow seed for reproducibility
+        # no need for numpy seed
+        # np.random.seed(seed)
+
     # compute class weights
     # bigger number reflects fewer samples
     from sklearn.utils.class_weight import compute_class_weight
@@ -105,7 +113,6 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
                                                                     classes=np.unique(y_integers), 
                                                                     y=y_integers)
     class_weights = dict(enumerate(class_weights))
-
     
     # set up the callbacks
     from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
@@ -116,17 +123,17 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
 
     # setup data for best performance
     train_data=tf.data.Dataset.from_tensor_slices((x_validation,y_validation))
+    # train_data=train_data.repeat().shuffle(shuffle_value, seed=seed).batch(batch_size).prefetch(tf.data.AUTOTUNE) # this seed is unecessary
     train_data=train_data.repeat().shuffle(shuffle_value).batch(batch_size).prefetch(tf.data.AUTOTUNE)
     
     # fit the model and return the history
     return model.fit(x_train, y_train, 
-        steps_per_epoch=y_train.shape[0]/batch_size,
-        batch_size=batch_size, 
-        epochs=epochs, 
-        initial_epoch= initial_epoch, 
-        validation_data=(x_validation, y_validation),
-        callbacks=[earlystop, reduce, checkpoint],
-        class_weight = class_weights,
-        verbose=train_verbose
-        )
-
+                     steps_per_epoch = y_train.shape[0]/batch_size,
+                     batch_size = batch_size,
+                     epochs = epochs,
+                     initial_epoch = initial_epoch,
+                     validation_data = (x_validation, y_validation),
+                     callbacks = [earlystop, reduce, checkpoint],
+                     class_weight = class_weights,
+                     verbose = train_verbose,
+                     )
