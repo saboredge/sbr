@@ -9,16 +9,18 @@ from unittest import TestCase
 
 import numpy as np
 import difflib
-import asyncio
+import tensorflow as tf
 
 class TestSBR(TestCase):
+    load_done = False
+    setup_done = False
+    compile_done = False
+    fit_done = False
+
     def fcmp(self, test_file_name):
         import filecmp
         self.assertTrue(filecmp.cmp(f'tests/out/{test_file_name}',
                                     f'tests/expected/{test_file_name}'))
-
-    load_done = False
-    setup_done = False
 
     def cache_load(self):
         if self.load_done:
@@ -76,27 +78,116 @@ class TestSBR(TestCase):
         print(f"y_train[0] = {self.y_train[0]}")
         self.assertTrue((self.y_train[0] == y_train_0_expected).all())
 
-
-        
-    def test_compile(self):
-        self.cache_setup()
-
+    def cache_compile(self):
+        if self.compile_done:
+            return
         from sbr import compile
         specificityAtSensitivityThreshold=0.50
         sensitivityAtSpecificityThreshold=0.50
-        model = compile.one_layer_multicategorical(input_size=self.x_train.shape[1],
-                                                   output_size=self.y_train.shape[1],
-                                                   dim=1000,
-                                                   output_activation='softmax',
-                                                   learning_rate=0.0001,
-                                                   isMultilabel=True,
-                                                   specificityAtSensitivityThreshold=specificityAtSensitivityThreshold,
-                                                   sensitivityAtSpecificityThreshold=sensitivityAtSpecificityThreshold,
-                                                   verbose=True)
+        self.model = compile.one_layer_multicategorical(input_size=self.x_train.shape[1],
+                                                        output_size=self.y_train.shape[1],
+                                                        dim=1000,
+                                                        output_activation='softmax',
+                                                        learning_rate=0.0001,
+                                                        isMultilabel=True,
+                                                        specificityAtSensitivityThreshold=specificityAtSensitivityThreshold,
+                                                        sensitivityAtSpecificityThreshold=sensitivityAtSpecificityThreshold,
+                                                        kernel_initializer = tf.keras.initializers.HeNormal(seed = 42), 
+                                                        bias_initializer = tf.zeros_initializer(),
+                                                        seed=42,
+                                                        verbose=True)
+        
+    def cache_fit(self):
+        if self.fit_done:
+            return
+        from sbr import fit
+        self.history=fit.multicategorical_model(model=self.model,
+                                                model_folder ='tests/out',
+                                                x_train=self.x_train, y_train=self.y_train,
+                                                x_validation=self.x_validation, y_validation=self.y_validation,
+                                                epochs = 3,
+                                                patience = 2,
+                                                lr_patience = 1,
+                                                checkpoint_verbose=1,
+                                                train_verbose=0,
+                                                seed = 42)
+    def test_compile(self):
+        self.cache_setup()
+        self.cache_compile()
 
         with open('tests/out/compile.txt','w') as fh:
             # Pass the file handle in as a lambda function to make it callable
-            model.summary(print_fn=lambda x: fh.write(x + '\n'))
+            self.model.summary(print_fn=lambda x: fh.write(x + '\n'))
 
         self.fcmp('compile.txt')
 
+    def write_test_pred_pairs(self, test_filename, pairs=None, write_tests=False):
+        import json
+        from json import JSONEncoder
+        class NumpyArrayEncoder(JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                return JSONEncoder.default(self, obj)
+
+        with open(f"tests/out/{test_filename}", "a") as f:
+            y_pred_json = json.dumps(np.argmax(self.y_pred,axis=1).astype(int),
+                                     cls=NumpyArrayEncoder) 
+            f.write("{  ")
+            
+            if write_tests:
+                y_test_json = json.dumps(np.argmax(self.y_test,axis=1).astype(int), cls=NumpyArrayEncoder) 
+                f.write(f"  'y_test': {y_test_json}\n")
+
+            # print pred no matter what
+            y_pred_json = json.dumps(np.argmax(self.y_pred,axis=1).astype(int), cls=NumpyArrayEncoder) 
+            f.write(f"  'y_pred': {y_pred_json}\n")
+
+            if pairs is not None:
+                f.write("  'pairs': [  ")
+                for line in pairs:
+                    f.write(f"{line}, ")
+                f.write("  ]\n")
+
+            f.write("}\n")
+
+
+    def test_pred(self):
+        self.cache_setup()
+        self.cache_compile()
+        self.cache_fit()
+
+        self.y_pred = self.model.predict(self.x_test) # xxx
+        self.write_test_pred_pairs("compare_predictions.json")
+
+        self.fcmp("compare_predictions.json")
+
+
+    def test_evaluate_compare_pred(self):
+        self.cache_setup()
+        self.cache_compile()
+        self.cache_fit()
+
+        from sbr.evaluate import compare_predictions
+        self.y_pred, pairs = compare_predictions(y_pred=self.model.predict(self.x_test),
+                                                 y_test=self.y_test,
+                                                 class_names=self.class_names,
+                                                 verbose = True)
+
+        self.write_test_pred_pairs("compare_predictions.json", pairs=pairs)
+        self.fcmp("compare_predictions.json")
+        
+
+
+    # xxx do this next
+    '''
+    def test_evaluate_mislabeled(self):
+        self.cache_setup()
+        self.cache_compile()
+        self.cache_fit()
+        # xxx where to get label_df?
+        mislabeled_counts, mislabeled = mislabeled_pair_counts(model=self.model, X=self.X, y=self.y, class_names=self.class_names,
+                                                               sample_ids = pd.Series(label_df["sample_id"]),
+                                                               batch_size=500)
+        print(mislabeled_counts)
+    '''
