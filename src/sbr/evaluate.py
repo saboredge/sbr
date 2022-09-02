@@ -1,12 +1,13 @@
 import numpy as np
-def compare_predictions(model, x_test, y_test, class_names=None, verbose = True):
+def compare_predictions(y_test, y_pred=None, model=None, x_test=None, class_names=None, verbose = True):
     '''
-    Predicts y_test from x_test using model, then compares predictions with truth.
+    Compares predictions with truth. If `y_pred` is `None`, predicts `y_test` from `x_test` using `model`.
 
     Args:
-      model: the model to use `model.predict`
-      x_test: test features
       y_test: targets
+      y_pred: values to compare to y_test; if null, uses model and x_test to create y_pred
+      model: the model to use `model.predict`; used to create y_pred if y_pred==None
+      x_test: the features to use with `model` to predict `y_pred` if `y_pred` not present.
       class_names: an ordered list of class name strings that map to the `np.argmax(y_test,axis=1)` indices in y_test. If none, class indices will be reported instead of strng names.
       verbose: if verbose, pairs are printed out (good if there aren't a lot of mislabeled predictions)
 
@@ -36,7 +37,8 @@ def compare_predictions(model, x_test, y_test, class_names=None, verbose = True)
 
 
     '''
-    y_pred = model.predict(x_test)
+    if y_pred is None:
+        y_pred = model.predict(x_test)
 
     if verbose:
         print("")
