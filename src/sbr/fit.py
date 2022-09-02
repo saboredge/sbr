@@ -102,8 +102,6 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
     """
     if seed != None:
         tf.random.set_seed(seed) # set tensorflow seed for reproducibility
-        # no need for numpy seed
-        # np.random.seed(seed)
 
     # compute class weights
     # bigger number reflects fewer samples
@@ -123,7 +121,6 @@ def multicategorical_model(model, model_folder, x_train, y_train, x_validation, 
 
     # setup data for best performance
     train_data=tf.data.Dataset.from_tensor_slices((x_validation,y_validation))
-    # train_data=train_data.repeat().shuffle(shuffle_value, seed=seed).batch(batch_size).prefetch(tf.data.AUTOTUNE) # this seed is unecessary
     train_data=train_data.repeat().shuffle(shuffle_value).batch(batch_size).prefetch(tf.data.AUTOTUNE)
     
     # fit the model and return the history
